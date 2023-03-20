@@ -1,0 +1,8 @@
+type NewFirmCreated @entity(immutable: true) {
+  id: Bytes!
+  creator: Bytes! # address
+  safe: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

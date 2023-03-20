@@ -1,0 +1,828 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract GnosisSafeProxyFactory",
+        "name": "_safeFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "contract UpgradeableModuleProxyFactory",
+        "name": "_moduleFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "contract FirmRelayer",
+        "name": "_relayer",
+        "type": "address"
+      },
+      { "internalType": "address", "name": "_safeImpl", "type": "address" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  { "inputs": [], "name": "EnableModuleFailed", "type": "error" },
+  { "inputs": [], "name": "InvalidConfig", "type": "error" },
+  { "inputs": [], "name": "InvalidContext", "type": "error" },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "contract GnosisSafe",
+        "name": "safe",
+        "type": "address"
+      }
+    ],
+    "name": "NewFirmCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "uint256", "name": "nonce", "type": "uint256" }
+    ],
+    "name": "createBarebonesFirm",
+    "outputs": [
+      {
+        "internalType": "contract GnosisSafe",
+        "name": "safe",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address[]",
+            "name": "owners",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "requiredSignatures",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct FirmFactory.SafeConfig",
+        "name": "safeConfig",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "withCaptableAndVoting",
+            "type": "bool"
+          },
+          { "internalType": "bool", "name": "withSemaphore", "type": "bool" },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "parentAllowanceId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "spender",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "token",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "EncodedTimeShift",
+                    "name": "recurrency",
+                    "type": "bytes6"
+                  },
+                  { "internalType": "string", "name": "name", "type": "string" }
+                ],
+                "internalType": "struct FirmFactory.AllowanceCreationInput[]",
+                "name": "allowances",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.BudgetConfig",
+            "name": "budgetConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "bytes32",
+                    "name": "roleAdmins",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "address[]",
+                    "name": "grantees",
+                    "type": "address[]"
+                  }
+                ],
+                "internalType": "struct FirmFactory.RoleCreationInput[]",
+                "name": "roles",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.RolesConfig",
+            "name": "rolesConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              { "internalType": "string", "name": "name", "type": "string" },
+              {
+                "components": [
+                  {
+                    "internalType": "string",
+                    "name": "className",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "ticker",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "uint128",
+                    "name": "authorized",
+                    "type": "uint128"
+                  },
+                  {
+                    "internalType": "uint32",
+                    "name": "convertsToClassId",
+                    "type": "uint32"
+                  },
+                  {
+                    "internalType": "uint16",
+                    "name": "votingWeight",
+                    "type": "uint16"
+                  },
+                  {
+                    "internalType": "contract IBouncer",
+                    "name": "bouncer",
+                    "type": "address"
+                  }
+                ],
+                "internalType": "struct FirmFactory.ClassCreationInput[]",
+                "name": "classes",
+                "type": "tuple[]"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "classId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct FirmFactory.ShareIssuanceInput[]",
+                "name": "issuances",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.CaptableConfig",
+            "name": "captableConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "quorumNumerator",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votingDelay",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votingPeriod",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "proposalThreshold",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct FirmFactory.VotingConfig",
+            "name": "votingConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bool",
+                "name": "safeDefaultAllowAll",
+                "type": "bool"
+              },
+              {
+                "internalType": "bool",
+                "name": "safeAllowDelegateCalls",
+                "type": "bool"
+              },
+              {
+                "internalType": "bool",
+                "name": "votingAllowValueCalls",
+                "type": "bool"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "enum Semaphore.ExceptionType",
+                    "name": "exceptionType",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "target",
+                    "type": "address"
+                  },
+                  { "internalType": "bytes4", "name": "sig", "type": "bytes4" }
+                ],
+                "internalType": "struct FirmFactory.SemaphoreException[]",
+                "name": "semaphoreExceptions",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.SemaphoreConfig",
+            "name": "semaphoreConfig",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct FirmFactory.FirmConfig",
+        "name": "firmConfig",
+        "type": "tuple"
+      },
+      { "internalType": "uint256", "name": "nonce", "type": "uint256" }
+    ],
+    "name": "createFirm",
+    "outputs": [
+      {
+        "internalType": "contract GnosisSafe",
+        "name": "safe",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "defaultBarebonesFirmConfig",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "withCaptableAndVoting",
+            "type": "bool"
+          },
+          { "internalType": "bool", "name": "withSemaphore", "type": "bool" },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "parentAllowanceId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "spender",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "token",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "EncodedTimeShift",
+                    "name": "recurrency",
+                    "type": "bytes6"
+                  },
+                  { "internalType": "string", "name": "name", "type": "string" }
+                ],
+                "internalType": "struct FirmFactory.AllowanceCreationInput[]",
+                "name": "allowances",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.BudgetConfig",
+            "name": "budgetConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "bytes32",
+                    "name": "roleAdmins",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "address[]",
+                    "name": "grantees",
+                    "type": "address[]"
+                  }
+                ],
+                "internalType": "struct FirmFactory.RoleCreationInput[]",
+                "name": "roles",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.RolesConfig",
+            "name": "rolesConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              { "internalType": "string", "name": "name", "type": "string" },
+              {
+                "components": [
+                  {
+                    "internalType": "string",
+                    "name": "className",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "ticker",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "uint128",
+                    "name": "authorized",
+                    "type": "uint128"
+                  },
+                  {
+                    "internalType": "uint32",
+                    "name": "convertsToClassId",
+                    "type": "uint32"
+                  },
+                  {
+                    "internalType": "uint16",
+                    "name": "votingWeight",
+                    "type": "uint16"
+                  },
+                  {
+                    "internalType": "contract IBouncer",
+                    "name": "bouncer",
+                    "type": "address"
+                  }
+                ],
+                "internalType": "struct FirmFactory.ClassCreationInput[]",
+                "name": "classes",
+                "type": "tuple[]"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "classId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct FirmFactory.ShareIssuanceInput[]",
+                "name": "issuances",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.CaptableConfig",
+            "name": "captableConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "quorumNumerator",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votingDelay",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votingPeriod",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "proposalThreshold",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct FirmFactory.VotingConfig",
+            "name": "votingConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bool",
+                "name": "safeDefaultAllowAll",
+                "type": "bool"
+              },
+              {
+                "internalType": "bool",
+                "name": "safeAllowDelegateCalls",
+                "type": "bool"
+              },
+              {
+                "internalType": "bool",
+                "name": "votingAllowValueCalls",
+                "type": "bool"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "enum Semaphore.ExceptionType",
+                    "name": "exceptionType",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "target",
+                    "type": "address"
+                  },
+                  { "internalType": "bytes4", "name": "sig", "type": "bytes4" }
+                ],
+                "internalType": "struct FirmFactory.SemaphoreException[]",
+                "name": "semaphoreExceptions",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.SemaphoreConfig",
+            "name": "semaphoreConfig",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct FirmFactory.FirmConfig",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "owner", "type": "address" }
+    ],
+    "name": "defaultOneOwnerSafeConfig",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address[]",
+            "name": "owners",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "requiredSignatures",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct FirmFactory.SafeConfig",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "moduleFactory",
+    "outputs": [
+      {
+        "internalType": "contract UpgradeableModuleProxyFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "relayer",
+    "outputs": [
+      { "internalType": "contract FirmRelayer", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "safeFactory",
+    "outputs": [
+      {
+        "internalType": "contract GnosisSafeProxyFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "safeImpl",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "withCaptableAndVoting",
+            "type": "bool"
+          },
+          { "internalType": "bool", "name": "withSemaphore", "type": "bool" },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "parentAllowanceId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "spender",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "token",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "EncodedTimeShift",
+                    "name": "recurrency",
+                    "type": "bytes6"
+                  },
+                  { "internalType": "string", "name": "name", "type": "string" }
+                ],
+                "internalType": "struct FirmFactory.AllowanceCreationInput[]",
+                "name": "allowances",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.BudgetConfig",
+            "name": "budgetConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "bytes32",
+                    "name": "roleAdmins",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "address[]",
+                    "name": "grantees",
+                    "type": "address[]"
+                  }
+                ],
+                "internalType": "struct FirmFactory.RoleCreationInput[]",
+                "name": "roles",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.RolesConfig",
+            "name": "rolesConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              { "internalType": "string", "name": "name", "type": "string" },
+              {
+                "components": [
+                  {
+                    "internalType": "string",
+                    "name": "className",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "string",
+                    "name": "ticker",
+                    "type": "string"
+                  },
+                  {
+                    "internalType": "uint128",
+                    "name": "authorized",
+                    "type": "uint128"
+                  },
+                  {
+                    "internalType": "uint32",
+                    "name": "convertsToClassId",
+                    "type": "uint32"
+                  },
+                  {
+                    "internalType": "uint16",
+                    "name": "votingWeight",
+                    "type": "uint16"
+                  },
+                  {
+                    "internalType": "contract IBouncer",
+                    "name": "bouncer",
+                    "type": "address"
+                  }
+                ],
+                "internalType": "struct FirmFactory.ClassCreationInput[]",
+                "name": "classes",
+                "type": "tuple[]"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "uint256",
+                    "name": "classId",
+                    "type": "uint256"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "account",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct FirmFactory.ShareIssuanceInput[]",
+                "name": "issuances",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.CaptableConfig",
+            "name": "captableConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint256",
+                "name": "quorumNumerator",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votingDelay",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "votingPeriod",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "proposalThreshold",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct FirmFactory.VotingConfig",
+            "name": "votingConfig",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bool",
+                "name": "safeDefaultAllowAll",
+                "type": "bool"
+              },
+              {
+                "internalType": "bool",
+                "name": "safeAllowDelegateCalls",
+                "type": "bool"
+              },
+              {
+                "internalType": "bool",
+                "name": "votingAllowValueCalls",
+                "type": "bool"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "enum Semaphore.ExceptionType",
+                    "name": "exceptionType",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "target",
+                    "type": "address"
+                  },
+                  { "internalType": "bytes4", "name": "sig", "type": "bytes4" }
+                ],
+                "internalType": "struct FirmFactory.SemaphoreException[]",
+                "name": "semaphoreExceptions",
+                "type": "tuple[]"
+              }
+            ],
+            "internalType": "struct FirmFactory.SemaphoreConfig",
+            "name": "semaphoreConfig",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct FirmFactory.FirmConfig",
+        "name": "config",
+        "type": "tuple"
+      },
+      { "internalType": "uint256", "name": "nonce", "type": "uint256" }
+    ],
+    "name": "setupFirm",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
