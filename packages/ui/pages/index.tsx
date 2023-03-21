@@ -4,6 +4,7 @@ import MenuBar from "@/components/menuBar";
 import MainSection from "@/components/mainSection";
 import Footer from "@/components/footer";
 import { Box, VStack } from "@chakra-ui/react";
+import Firms from "@/components/firms";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,7 @@ export default function Home() {
       </Head>
       <Box bg="gray.300">
         <MenuBar />
+        <Firms />
         <MainSection />
         <Footer />
       </Box>

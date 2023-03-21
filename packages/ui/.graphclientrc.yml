@@ -1,0 +1,8 @@
+sources:
+  - name: firm-org
+    handler:
+      graphql:
+        endpoint: https://api.studio.thegraph.com/query/3029/firm-org/v0.0.1
+
+documents:
+  - ./graph/firms.graphql
