@@ -11,7 +11,9 @@ import {
   Tooltip,
   Button,
   Flex,
+  Link,
 } from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useCompanies, EnhancedFirmsQueryQuery } from "@/hooks/useCompanies";
 
 type PartialFirm = Partial<
@@ -74,7 +76,14 @@ function Firms() {
                   </Tooltip>
                 </Td>
                 <Td textAlign="center">{firm.creatorName}</Td>
-                <Td textAlign="center">{firm.safeDisplay}</Td>
+                <Td textAlign="center">
+                  <Link
+                    href={"https://goerli.etherscan.io/address/" + firm.safe}
+                    isExternal
+                  >
+                    {firm.safeDisplay} <ExternalLinkIcon mx="2px" />
+                  </Link>
+                </Td>
                 <Td textAlign="center">{firm.blockDate}</Td>
               </Tr>
             ))}
