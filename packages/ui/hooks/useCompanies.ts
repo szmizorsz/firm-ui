@@ -5,8 +5,8 @@ import {
   execute,
   NewFirmCreated,
 } from "../.graphclient";
-import provider from "@/util/ethersProvider";
 import { resolveENSName } from "@/util/resolveENS";
+import { truncateAddress } from "@/util/ethAddressUtil";
 
 export type EnhancedFirmsQueryQuery = FirmsQueryQuery & {
   newFirmCreateds: Array<
@@ -28,7 +28,8 @@ export function useCompanies() {
       if (enhancedResult?.newFirmCreateds) {
         for (const firm of enhancedResult.newFirmCreateds) {
           const ensName = await resolveENSName(firm.creator);
-          firm.creatorName = ensName === "NOT FOUND" ? firm.creator : ensName;
+          firm.creatorName =
+            ensName === "NOT FOUND" ? truncateAddress(firm.creator) : ensName;
           firm.idDisplay = `${firm.id.substr(0, 6)}...${firm.id.substr(-8)}`;
           firm.blockDate = new Date(
             firm.blockTimestamp * 1000
