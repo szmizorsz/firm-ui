@@ -41,7 +41,7 @@ function Firms() {
                       {firm.idDisplay}
                     </Tooltip>
                   </Td>
-                  <Td>{firm.creator}</Td>
+                  <Td>{firm.creatorName}</Td>
                   <Td>{firm.safe}</Td>
                   <Td>{firm.blockDate}</Td>
                 </Tr>

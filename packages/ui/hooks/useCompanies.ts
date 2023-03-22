@@ -5,12 +5,15 @@ import {
   execute,
   NewFirmCreated,
 } from "../.graphclient";
+import provider from "@/util/ethersProvider";
+import { resolveENSName } from "@/util/resolveENS";
 
 export type EnhancedFirmsQueryQuery = FirmsQueryQuery & {
   newFirmCreateds: Array<
     Pick<NewFirmCreated, "id" | "creator" | "safe" | "blockTimestamp"> & {
       idDisplay: string;
       blockDate: string;
+      creatorName: string;
     }
   >;
 };
@@ -20,16 +23,17 @@ export function useCompanies() {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   useEffect(() => {
-    execute(FirmsQueryDocument, {}).then((result) => {
+    execute(FirmsQueryDocument, {}).then(async (result) => {
       const enhancedResult = result?.data as EnhancedFirmsQueryQuery;
       if (enhancedResult?.newFirmCreateds) {
-        enhancedResult.newFirmCreateds = enhancedResult.newFirmCreateds.map(
-          (firm) => ({
-            ...firm,
-            idDisplay: `${firm.id.substr(0, 6)}...${firm.id.substr(-8)}`,
-            blockDate: new Date(firm.blockTimestamp * 1000).toLocaleString(),
-          })
-        );
+        for (const firm of enhancedResult.newFirmCreateds) {
+          const ensName = await resolveENSName(firm.creator);
+          firm.creatorName = ensName === "NOT FOUND" ? firm.creator : ensName;
+          firm.idDisplay = `${firm.id.substr(0, 6)}...${firm.id.substr(-8)}`;
+          firm.blockDate = new Date(
+            firm.blockTimestamp * 1000
+          ).toLocaleString();
+        }
       }
       enhancedResult.newFirmCreateds.sort(
         (
@@ -42,7 +46,6 @@ export function useCompanies() {
         }
       );
       setData(enhancedResult);
-      debugger;
       setIsLoading(false);
     });
   }, [setData]);
