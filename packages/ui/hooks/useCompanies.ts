@@ -14,6 +14,7 @@ export type EnhancedFirmsQueryQuery = FirmsQueryQuery & {
       idDisplay: string;
       blockDate: string;
       creatorName: string;
+      safeDisplay: string;
     }
   >;
 };
@@ -34,6 +35,7 @@ export function useCompanies() {
           firm.blockDate = new Date(
             firm.blockTimestamp * 1000
           ).toLocaleString();
+          firm.safeDisplay = truncateAddress(firm.safe);
         }
       }
       enhancedResult.newFirmCreateds.sort(
