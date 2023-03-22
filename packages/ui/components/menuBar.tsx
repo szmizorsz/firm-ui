@@ -32,8 +32,6 @@ function MenuBar() {
           </Flex>
         </Container>
       </Box>
-
-      {/* Other sections go here... */}
     </>
   );
 }
