@@ -29,7 +29,7 @@ function Firms() {
               <Th>Id</Th>
               <Th>Creator</Th>
               <Th>Safe</Th>
-              <Th>Block Number</Th>
+              <Th>Created at</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -43,7 +43,7 @@ function Firms() {
                   </Td>
                   <Td>{firm.creator}</Td>
                   <Td>{firm.safe}</Td>
-                  <Td>{firm.blockNumber}</Td>
+                  <Td>{firm.blockDate}</Td>
                 </Tr>
               )
             )}

@@ -8,8 +8,9 @@ import {
 
 export type EnhancedFirmsQueryQuery = FirmsQueryQuery & {
   newFirmCreateds: Array<
-    Pick<NewFirmCreated, "id" | "creator" | "safe" | "blockNumber"> & {
+    Pick<NewFirmCreated, "id" | "creator" | "safe" | "blockTimestamp"> & {
       idDisplay: string;
+      blockDate: string;
     }
   >;
 };
@@ -26,9 +27,20 @@ export function useCompanies() {
           (firm) => ({
             ...firm,
             idDisplay: `${firm.id.substr(0, 6)}...${firm.id.substr(-8)}`,
+            blockDate: new Date(firm.blockTimestamp * 1000).toLocaleString(),
           })
         );
       }
+      enhancedResult.newFirmCreateds.sort(
+        (
+          a: EnhancedFirmsQueryQuery["newFirmCreateds"][number],
+          b: EnhancedFirmsQueryQuery["newFirmCreateds"][number]
+        ) => {
+          return (
+            new Date(b.blockDate).getTime() - new Date(a.blockDate).getTime()
+          );
+        }
+      );
       setData(enhancedResult);
       debugger;
       setIsLoading(false);

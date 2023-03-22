@@ -560,7 +560,7 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
 export type FirmsQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FirmsQueryQuery = { newFirmCreateds: Array<Pick<NewFirmCreated, 'id' | 'creator' | 'safe' | 'blockNumber'>> };
+export type FirmsQueryQuery = { newFirmCreateds: Array<Pick<NewFirmCreated, 'id' | 'creator' | 'safe' | 'blockTimestamp'>> };
 
 
 export const FirmsQueryDocument = gql`
@@ -569,7 +569,7 @@ export const FirmsQueryDocument = gql`
     id
     creator
     safe
-    blockNumber
+    blockTimestamp
   }
 }
     ` as unknown as DocumentNode<FirmsQueryQuery, FirmsQueryQueryVariables>;
