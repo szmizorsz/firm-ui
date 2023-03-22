@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-const provider = new ethers.AlchemyProvider(
+const provider = new ethers.providers.AlchemyProvider(
   "mainnet",
   process.env.NEXT_PUBLIC_ALCHEMY_KEY
 );

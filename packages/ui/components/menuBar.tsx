@@ -1,16 +1,6 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Heading,
-  HStack,
-  Image,
-  Link,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Container, Flex, Image, Link } from "@chakra-ui/react";
+import { RainbowConnectWallet } from "./rainbowConnectWallet";
 
 function MenuBar() {
   return (
@@ -25,10 +15,7 @@ function MenuBar() {
                 alt="logo"
               />
             </Link>
-
-            <Button bg="#6485ff" _hover={{ bg: "#284779" }} color="white">
-              Connect wallet
-            </Button>
+            <RainbowConnectWallet />
           </Flex>
         </Container>
       </Box>
