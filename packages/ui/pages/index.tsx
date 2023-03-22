@@ -1,9 +1,8 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import MenuBar from "@/components/menuBar";
-import MainSection from "@/components/mainSection";
 import Footer from "@/components/footer";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, Grid, GridItem, VStack } from "@chakra-ui/react";
 import Firms from "@/components/firms";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -51,8 +50,13 @@ export default function Home() {
       </Head>
       <Box bg="gray.300">
         <MenuBar />
-        <Firms />
-        <MainSection />
+        <Grid templateColumns="repeat(6, 1fr)" gap={4} p={4}>
+          <GridItem colSpan={1} />
+          <GridItem colSpan={4}>
+            <Firms />
+          </GridItem>
+          <GridItem colSpan={1} />
+        </Grid>
         <Footer />
       </Box>
     </>

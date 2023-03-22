@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   Thead,
@@ -9,11 +9,44 @@ import {
   Spinner,
   Text,
   Tooltip,
+  Button,
+  Flex,
 } from "@chakra-ui/react";
 import { useCompanies, EnhancedFirmsQueryQuery } from "@/hooks/useCompanies";
 
+type PartialFirm = Partial<
+  Pick<
+    EnhancedFirmsQueryQuery["newFirmCreateds"][number],
+    "idDisplay" | "blockDate" | "creatorName" | "safeDisplay"
+  >
+> &
+  Pick<
+    EnhancedFirmsQueryQuery["newFirmCreateds"][number],
+    "id" | "creator" | "safe" | "blockTimestamp"
+  >;
+
 function Firms() {
   const { data, isLoading } = useCompanies();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = data?.newFirmCreateds
+    .map((firm): PartialFirm => firm)
+    .slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(
+    (data?.newFirmCreateds?.length ?? 0) / rowsPerPage
+  );
+
+  const handleClickNext = () => {
+    setCurrentPage((page) => Math.min(page + 1, totalPages));
+  };
+
+  const handleClickPrev = () => {
+    setCurrentPage((page) => Math.max(page - 1, 1));
+  };
 
   return (
     <>
@@ -26,30 +59,52 @@ function Firms() {
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>Id</Th>
-              <Th>Creator</Th>
-              <Th>Safe</Th>
-              <Th>Created at</Th>
+              <Th textAlign="center">Id</Th>
+              <Th textAlign="center">Creator</Th>
+              <Th textAlign="center">Safe</Th>
+              <Th textAlign="center">Created at</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {data?.newFirmCreateds.map(
-              (firm: EnhancedFirmsQueryQuery["newFirmCreateds"][number]) => (
-                <Tr key={firm.id}>
-                  <Td>
-                    <Tooltip label={firm.id} fontSize="md">
-                      {firm.idDisplay}
-                    </Tooltip>
-                  </Td>
-                  <Td>{firm.creatorName}</Td>
-                  <Td>{firm.safeDisplay}</Td>
-                  <Td>{firm.blockDate}</Td>
-                </Tr>
-              )
-            )}
+            {currentRows?.map((firm) => (
+              <Tr key={firm.id}>
+                <Td textAlign="center">
+                  <Tooltip label={firm.id} fontSize="md">
+                    {firm.idDisplay}
+                  </Tooltip>
+                </Td>
+                <Td textAlign="center">{firm.creatorName}</Td>
+                <Td textAlign="center">{firm.safeDisplay}</Td>
+                <Td textAlign="center">{firm.blockDate}</Td>
+              </Tr>
+            ))}
           </Tbody>
         </Table>
       )}
+      <Flex justifyContent="center" alignItems="center" flexDirection="column">
+        <Text my={4}>
+          Showing {indexOfFirstRow + 1} to {indexOfLastRow} of{" "}
+          {data?.newFirmCreateds?.length ?? 0} entries
+        </Text>
+        <Flex justifyContent="center">
+          <Button
+            disabled={currentPage === 1}
+            onClick={handleClickPrev}
+            my={4}
+            mx={2}
+          >
+            Prev
+          </Button>
+          <Button
+            disabled={currentPage === totalPages}
+            onClick={handleClickNext}
+            my={4}
+            mx={2}
+          >
+            Next
+          </Button>
+        </Flex>
+      </Flex>
     </>
   );
 }
