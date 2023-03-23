@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Thead,
@@ -12,9 +12,12 @@ import {
   Button,
   Flex,
   Link,
+  Checkbox,
+  Box,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useCompanies, EnhancedFirmsQueryQuery } from "@/hooks/useCompanies";
+import { useAccount } from "wagmi";
 
 type PartialFirm = Partial<
   Pick<
@@ -28,19 +31,53 @@ type PartialFirm = Partial<
   >;
 
 function Firms() {
+  const { address, isConnected } = useAccount();
   const { data, isLoading } = useCompanies();
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [showMyCompanies, setShowMyCompanies] = useState(false);
+
+  const handleMyCompaniesChange = (e: {
+    target: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
+    setShowMyCompanies(e.target.checked);
+  };
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = data?.newFirmCreateds
-    .map((firm): PartialFirm => firm)
-    .slice(indexOfFirstRow, indexOfLastRow);
 
-  const totalPages = Math.ceil(
-    (data?.newFirmCreateds?.length ?? 0) / rowsPerPage
+  const [filteredFirms, setFilteredFirms] = useState<PartialFirm[] | undefined>(
+    undefined
   );
+
+  useEffect(() => {
+    if (data) {
+      const newFilteredFirms = data.newFirmCreateds
+        .map((firm): PartialFirm => firm)
+        .filter((firm) => {
+          return (
+            !showMyCompanies ||
+            (isConnected &&
+              address &&
+              firm.creator.toLowerCase() === address.toLowerCase())
+          );
+        });
+
+      setFilteredFirms(newFilteredFirms);
+    }
+  }, [data, showMyCompanies, isConnected, address]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [showMyCompanies]);
+
+  if (!filteredFirms) {
+    return <>Loading...</>;
+  }
+
+  const currentRows = filteredFirms.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil((filteredFirms.length ?? 0) / rowsPerPage);
 
   const handleClickNext = () => {
     setCurrentPage((page) => Math.min(page + 1, totalPages));
@@ -52,9 +89,19 @@ function Firms() {
 
   return (
     <>
-      <Text fontSize="2xl" mb={4}>
-        Internet-native companies
-      </Text>
+      <Flex justifyContent="space-between" alignItems="center" mb={4}>
+        <Text fontSize="2xl">Internet-native companies</Text>
+        {isConnected && (
+          <Box>
+            <Checkbox
+              onChange={handleMyCompaniesChange}
+              isChecked={showMyCompanies}
+            >
+              My Companies
+            </Checkbox>
+          </Box>
+        )}
+      </Flex>
       {isLoading ? (
         <Spinner />
       ) : (
