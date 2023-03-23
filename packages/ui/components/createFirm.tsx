@@ -9,10 +9,13 @@ import {
   ModalFooter,
   useDisclosure,
   Text,
+  Box,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 function CreateFirm() {
+  const { isConnected } = useAccount();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [statusText, setStatusText] = useState("");
 
@@ -22,7 +25,11 @@ function CreateFirm() {
 
   return (
     <>
-      <Button onClick={onOpen}>Create</Button>
+      {isConnected ? (
+        <Button onClick={onOpen}>Create</Button>
+      ) : (
+        <Box minHeight="10"></Box>
+      )}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
