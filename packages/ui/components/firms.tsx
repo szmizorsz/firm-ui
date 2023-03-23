@@ -106,37 +106,39 @@ function Firms() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th textAlign="center">Id</Th>
-              <Th textAlign="center">Creator</Th>
-              <Th textAlign="center">Safe</Th>
-              <Th textAlign="center">Created at</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {currentRows?.map((firm) => (
-              <Tr key={firm.id}>
-                <Td textAlign="center">
-                  <Tooltip label={firm.id} fontSize="md">
-                    {firm.idDisplay}
-                  </Tooltip>
-                </Td>
-                <Td textAlign="center">{firm.creatorName}</Td>
-                <Td textAlign="center">
-                  <Link
-                    href={"https://goerli.etherscan.io/address/" + firm.safe}
-                    isExternal
-                  >
-                    {firm.safeDisplay} <ExternalLinkIcon mx="2px" />
-                  </Link>
-                </Td>
-                <Td textAlign="center">{firm.blockDate}</Td>
+        <Box minHeight="572px">
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th textAlign="center">Id</Th>
+                <Th textAlign="center">Creator</Th>
+                <Th textAlign="center">Safe</Th>
+                <Th textAlign="center">Created at</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {currentRows?.map((firm) => (
+                <Tr key={firm.id}>
+                  <Td textAlign="center">
+                    <Tooltip label={firm.id} fontSize="md">
+                      {firm.idDisplay}
+                    </Tooltip>
+                  </Td>
+                  <Td textAlign="center">{firm.creatorName}</Td>
+                  <Td textAlign="center">
+                    <Link
+                      href={"https://goerli.etherscan.io/address/" + firm.safe}
+                      isExternal
+                    >
+                      {firm.safeDisplay} <ExternalLinkIcon mx="2px" />
+                    </Link>
+                  </Td>
+                  <Td textAlign="center">{firm.blockDate}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </Box>
       )}
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
         <Flex flexDirection="column" width="100%" mb={4}>
