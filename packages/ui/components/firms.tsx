@@ -18,6 +18,7 @@ import {
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useCompanies, EnhancedFirmsQueryQuery } from "@/hooks/useCompanies";
 import { useAccount } from "wagmi";
+import CreateFirm from "./createFirm";
 
 type PartialFirm = Partial<
   Pick<
@@ -138,10 +139,19 @@ function Firms() {
         </Table>
       )}
       <Flex justifyContent="center" alignItems="center" flexDirection="column">
-        <Text my={4}>
-          Showing {indexOfFirstRow + 1} to {indexOfLastRow} of{" "}
-          {data?.newFirmCreateds?.length ?? 0} entries
-        </Text>
+        <Flex flexDirection="column" width="100%" mb={4}>
+          <Flex alignSelf="flex-start">
+            <Box mt="6">
+              <CreateFirm />
+            </Box>
+          </Flex>
+          <Flex alignSelf="center">
+            <Text>
+              Showing {indexOfFirstRow + 1} to {indexOfLastRow} of{" "}
+              {data?.newFirmCreateds?.length ?? 0} entries
+            </Text>
+          </Flex>
+        </Flex>
         <Flex justifyContent="center">
           <Button
             disabled={currentPage === 1}
