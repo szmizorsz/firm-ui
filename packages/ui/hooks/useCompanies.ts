@@ -43,9 +43,7 @@ export function useCompanies() {
           a: EnhancedFirmsQueryQuery["newFirmCreateds"][number],
           b: EnhancedFirmsQueryQuery["newFirmCreateds"][number]
         ) => {
-          return (
-            new Date(b.blockDate).getTime() - new Date(a.blockDate).getTime()
-          );
+          return b.blockTimestamp - a.blockTimestamp;
         }
       );
       setData(enhancedResult);
