@@ -11,7 +11,7 @@ function MenuBar() {
             <Link href="/" display="block">
               <Image
                 src="https://uploads-ssl.webflow.com/6331d579cfc14f02a29e1f65/6336c6b3566e8027d35db3f6_logo_header.png"
-                width="16"
+                width="12"
                 alt="logo"
               />
             </Link>

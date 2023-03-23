@@ -5,8 +5,6 @@ import Footer from "@/components/footer";
 import { Box, Grid, GridItem, VStack } from "@chakra-ui/react";
 import Firms from "@/components/firms";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function Home() {
   return (
     <>
@@ -50,7 +48,7 @@ export default function Home() {
       </Head>
       <Box bg="gray.300">
         <MenuBar />
-        <Grid templateColumns="repeat(6, 1fr)" gap={4} p={4}>
+        <Grid templateColumns="repeat(6, 1fr)" gap={4} p={4} pb={8}>
           <GridItem colSpan={1} />
           <GridItem colSpan={4}>
             <Firms />
