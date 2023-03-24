@@ -73,7 +73,11 @@ function Firms() {
   }, [showMyCompanies]);
 
   if (!filteredFirms) {
-    return <>Loading...</>;
+    return (
+      <Box minHeight="800px">
+        <Spinner />
+      </Box>
+    );
   }
 
   const currentRows = filteredFirms.slice(indexOfFirstRow, indexOfLastRow);
@@ -104,7 +108,9 @@ function Firms() {
         )}
       </Flex>
       {isLoading ? (
-        <Spinner />
+        <Box minHeight="772px">
+          <Spinner />
+        </Box>
       ) : (
         <Box minHeight="572px">
           <Table variant="simple">
