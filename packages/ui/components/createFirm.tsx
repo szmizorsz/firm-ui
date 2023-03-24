@@ -11,17 +11,38 @@ import {
   Text,
   Box,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { useAccount } from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import {
+  firmFactoryABI,
+  firmFactoryContractAddress,
+} from "@/config/firmFactory";
+import { generateNonce } from "@/util/nonceUtil";
+import { useEffect } from "react";
+import { goerli } from "wagmi";
 
 function CreateFirm() {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [statusText, setStatusText] = useState("");
 
-  const handleButtonClick = () => {
-    setStatusText("Not implemented yet!");
-  };
+  const nonce = generateNonce();
+
+  const { config } = usePrepareContractWrite({
+    address: firmFactoryContractAddress,
+    abi: firmFactoryABI,
+    chainId: goerli.id,
+    functionName: "createBarebonesFirm",
+    args: [address, nonce],
+    onSuccess(data) {
+      console.log("Success", data);
+    },
+  });
+  //console.log("config", config);
+  const { data, isLoading, isSuccess, write } = useContractWrite(config);
+
+  useEffect(() => {
+    console.log("mounting called");
+  }, []);
 
   return (
     <>
@@ -37,11 +58,17 @@ function CreateFirm() {
           <ModalCloseButton />
           <ModalBody>
             <Text>Create a barebone company with a one owner safe.</Text>
-            <Text>{statusText}</Text>
+            {isLoading && <div>Check Wallet</div>}
+            {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleButtonClick}>
-              Submit
+            <Button
+              colorScheme="blue"
+              mr={3}
+              disabled={!write}
+              onClick={() => write?.()}
+            >
+              Create
             </Button>
             <Button variant="ghost" onClick={onClose}>
               Close
