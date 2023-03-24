@@ -480,7 +480,7 @@ const firmOrgTransforms = [];
 const additionalTypeDefs = [] as any[];
 const firmOrgHandler = new GraphqlHandler({
               name: "firm-org",
-              config: {"endpoint":"https://api.studio.thegraph.com/query/3029/firm-org/v0.0.1"},
+              config: {"endpoint":"https://api.studio.thegraph.com/query/44378/firm-org/v0.0.1"},
               baseDir,
               cache,
               pubsub,
